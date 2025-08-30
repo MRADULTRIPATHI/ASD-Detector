@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASD Detection System Diagrams</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .diagram-container {
+            margin: 40px 0;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e8f4fd;
+        }
+        
+        .diagram-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .flow-box {
+            fill: #e8f6f3;
+            stroke: #16a085;
+            stroke-width: 2;
+            rx: 8;
+        }
+        
+        .process-box {
+            fill: #ebf3fd;
+            stroke: #3498db;
+            stroke-width: 2;
+            rx: 8;
+        }
+        
+        .storage-box {
+            fill: #fdf2e9;
+            stroke: #e67e22;
+            stroke-width: 2;
+            rx: 8;
+        }
+        
+        .cnn-layer {
+            fill: #f8f9fa;
+            stroke: #6c757d;
+            stroke-width: 2;
+            rx: 5;
+        }
+        
+        .feature-map {
+            fill: #e8f5e8;
+            stroke: #28a745;
+            stroke-width: 2;
+            rx: 5;
+        }
+        
+        .temporal-box {
+            fill: #fff3cd;
+            stroke: #ffc107;
+            stroke-width: 2;
+            rx: 8;
+        }
+        
+        .classification-box {
+            fill: #f8d7da;
+            stroke: #dc3545;
+            stroke-width: 2;
+            rx: 8;
+        }
+        
+        .arrow {
+            stroke: #34495e;
+            stroke-width: 2;
+            fill: #34495e;
+            marker-end: url(#arrowhead);
+        }
+        
+        .text-label {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            fill: #2c3e50;
+            text-anchor: middle;
+            font-weight: 500;
+        }
+        
+        .component-label {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            fill: #555;
+            text-anchor: middle;
+        }
+        
+        .timeline-bar {
+            fill: #3498db;
+            rx: 3;
+        }
+        
+        .behavior-indicator {
+            fill: #e74c3c;
+            rx: 2;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(45deg, #2980b9, #3498db);
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        .diagram-section {
+            display: none;
+        }
+        
+        .diagram-section.active {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            h1 { font-size: 2em; }
+            .text-label { font-size: 10px; }
+            .component-label { font-size: 9px; }
+            .nav-btn { padding: 10px 20px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ASD Detection System</h1>
+        <p class="subtitle">Technical Architecture Diagrams for Video-Based Behavioral Analysis</p>
+        
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showDiagram(0)">Figure 1: Video Input Processing</button>
+            <button class="nav-btn" onclick="showDiagram(1)">Figure 2: CNN Architecture</button>
+            <button class="nav-btn" onclick="showDiagram(2)">Figure 3: Temporal Modeling</button>
+            <button class="nav-btn" onclick="showDiagram(3)">Figure 4: Classification Output</button>
+        </div>
+
+        <!-- Figure 1: Video Input Processing System -->
+        <div class="diagram-section active" id="diagram-0">
+            <div class="diagram-container">
+                <div class="diagram-title">Figure 1: Video Input Processing System for ASD Detection</div>
+                <svg viewBox="0 0 1200 400">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#34495e"/>
+                        </marker>
+                    </defs>
+                    
+                    <!-- Video Stream Input -->
+                    <rect x="50" y="150" width="120" height="80" class="flow-box"/>
+                    <text x="110" y="175" class="text-label">Video Stream</text>
+                    <text x="110" y="190" class="text-label">Input</text>
+                    <text x="110" y="210" class="component-label">(Live/Recorded)</text>
+                    
+                    <!-- Arrow to Video Decoder -->
+                    <line x1="170" y1="190" x2="220" y2="190" class="arrow"/>
+                    
+                    <!-- Video Decoder (100) -->
+                    <rect x="240" y="130" width="140" height="120" class="process-box"/>
+                    <text x="310" y="155" class="text-label">Video Decoder</text>
+                    <text x="310" y="175" class="text-label">(100)</text>
+                    <text x="310" y="200" class="component-label">• Frame Extraction</text>
+                    <text x="310" y="215" class="component-label">• Format Conversion</text>
+                    <text x="310" y="230" class="component-label">• Quality Enhancement</text>
+                    
+                    <!-- Arrow to Temporal Sampler -->
+                    <line x1="380" y1="190" x2="430" y2="190" class="arrow"/>
+                    
+                    <!-- Temporal Sampler (210) -->
+                    <rect x="450" y="130" width="140" height="120" class="process-box"/>
+                    <text x="520" y="155" class="text-label">Temporal Sampler</text>
+                    <text x="520" y="175" class="text-label">(210)</text>
+                    <text x="520" y="200" class="component-label">• Frame Rate Control</text>
+                    <text x="520" y="215" class="component-label">• Sampling Strategy</text>
+                    <text x="520" y="230" class="component-label">• Buffer Management</text>
+                    
+                    <!-- Arrow to Frame Extraction Processor -->
+                    <line x1="590" y1="190" x2="640" y2="190" class="arrow"/>
+                    
+                    <!-- Frame Extraction Processor (200) -->
+                    <rect x="660" y="130" width="160" height="120" class="process-box"/>
+                    <text x="740" y="155" class="text-label">Frame Extraction</text>
+                    <text x="740" y="175" class="text-label">Processor (200)</text>
+                    <text x="740" y="200" class="component-label">• ROI Detection</text>
+                    <text x="740" y="215" class="component-label">• Preprocessing</text>
+                    <text x="740" y="230" class="component-label">• Quality Assessment</text>
+                    
+                    <!-- Arrow to Frame Storage Array -->
+                    <line x1="820" y1="190" x2="870" y2="190" class="arrow"/>
+                    
+                    <!-- Frame Storage Array (300) -->
+                    <rect x="890" y="100" width="160" height="180" class="storage-box"/>
+                    <text x="970" y="125" class="text-label">Frame Storage</text>
+                    <text x="970" y="145" class="text-label">Array (300)</text>
+                    
+                    <!-- Individual Frames -->
+                    <rect x="910" y="160" width="50" height="35" class="feature-map"/>
+                    <text x="935" y="180" class="component-label">Frame 1</text>
+                    
+                    <rect x="970" y="160" width="50" height="35" class="feature-map"/>
+                    <text x="995" y="180" class="component-label">Frame 2</text>
+                    
+                    <rect x="910" y="205" width="50" height="35" class="feature-map"/>
+                    <text x="935" y="225" class="component-label">Frame 3</text>
+                    
+                    <rect x="970" y="205" width="50" height="35" class="feature-map"/>
+                    <text x="995" y="225" class="component-label">Frame N</text>
+                    
+                    <text x="970" y="260" class="component-label">Ready for Analysis</text>
+                    
+                    <!-- Process Flow Indicators -->
+                    <text x="110" y="100" class="text-label" style="fill: #3498db; font-weight: bold;">INPUT</text>
+                    <text x="310" y="100" class="text-label" style="fill: #3498db; font-weight: bold;">DECODE</text>
+                    <text x="520" y="100" class="text-label" style="fill: #3498db; font-weight: bold;">SAMPLE</text>
+                    <text x="740" y="100" class="text-label" style="fill: #3498db; font-weight: bold;">PROCESS</text>
+                    <text x="970" y="70" class="text-label" style="fill: #e67e22; font-weight: bold;">STORAGE</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Figure 2: CNN Architecture -->
+        <div class="diagram-section" id="diagram-1">
+            <div class="diagram-container">
+                <div class="diagram-title">Figure 2: Convolutional Neural Network Architecture for Spatial Feature Extraction</div>
+                <svg viewBox="0 0 1400 500">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#34495e"/>
+                        </marker>
+                    </defs>
+                    
+                    <!-- Input Layer -->
+                    <rect x="50" y="150" width="100" height="150" class="flow-box"/>
+                    <text x="100" y="175" class="text-label">Input Layer</text>
+                    <text x="100" y="195" class="text-label">RGB Image</text>
+                    <text x="100" y="220" class="component-label">224×224×3</text>
+                    <text x="100" y="240" class="component-label">Normalized</text>
+                    <text x="100" y="260" class="component-label">Pixel Values</text>
+                    
+                    <!-- Conv Layer 1 -->
+                    <line x1="150" y1="225" x2="180" y2="225" class="arrow"/>
+                    <rect x="190" y="130" width="90" height="190" class="cnn-layer"/>
+                    <text x="235" y="155" class="text-label">Conv Layer 1</text>
+                    <text x="235" y="180" class="component-label">32 filters</text>
+                    <text x="235" y="195" class="component-label">3×3 kernel</text>
+                    <text x="235" y="210" class="component-label">ReLU</text>
+                    <text x="235" y="240" class="component-label">Output:</text>
+                    <text x="235" y="255" class="component-label">222×222×32</text>
+                    
+                    <!-- Pooling Layer 1 -->
+                    <line x1="280" y1="225" x2="310" y2="225" class="arrow"/>
+                    <rect x="320" y="160" width="80" height="130" class="process-box"/>
+                    <text x="360" y="185" class="text-label">MaxPool 1</text>
+                    <text x="360" y="205" class="component-label">2×2 pool</text>
+                    <text x="360" y="220" class="component-label">stride=2</text>
+                    <text x="360" y="245" class="component-label">Output:</text>
+                    <text x="360" y="260" class="component-label">111×111×32</text>
+                    
+                    <!-- Conv Layer 2 -->
+                    <line x1="400" y1="225" x2="430" y2="225" class="arrow"/>
+                    <rect x="440" y="130" width="90" height="190" class="cnn-layer"/>
+                    <text x="485" y="155" class="text-label">Conv Layer 2</text>
+                    <text x="485" y="180" class="component-label">64 filters</text>
+                    <text x="485" y="195" class="component-label">3×3 kernel</text>
+                    <text x="485" y="210" class="component-label">ReLU</text>
+                    <text x="485" y="240" class="component-label">Output:</text>
+                    <text x="485" y="255" class="component-label">109×109×64</text>
+                    
+                    <!-- Pooling Layer 2 -->
+                    <line x1="530" y1="225" x2="560" y2="225" class="arrow"/>
+                    <rect x="570" y="160" width="80" height="130" class="process-box"/>
+                    <text x="610" y="185" class="text-label">MaxPool 2</text>
+                    <text x="610" y="205" class="component-label">2×2 pool</text>
+                    <text x="610" y="220" class="component-label">stride=2</text>
+                    <text x="610" y="245" class="component-label">Output:</text>
+                    <text x="610" y="260" class="component-label">54×54×64</text>
+                    
+                    <!-- Conv Layer 3 -->
+                    <line x1="650" y1="225" x2="680" y2="225" class="arrow"/>
+                    <rect x="690" y="130" width="90" height="190" class="cnn-layer"/>
+                    <text x="735" y="155" class="text-label">Conv Layer 3</text>
+                    <text x="735" y="180" class="component-label">128 filters</text>
+                    <text x="735" y="195" class="component-label">3×3 kernel</text>
+                    <text x="735" y="210" class="component-label">ReLU</text>
+                    <text x="735" y="240" class="component-label">Output:</text>
+                    <text x="735" y="255" class="component-label">52×52×128</text>
+                    
+                    <!-- Pooling Layer 3 -->
+                    <line x1="780" y1="225" x2="810" y2="225" class="arrow"/>
+                    <rect x="820" y="160" width="80" height="130" class="process-box"/>
+                    <text x="860" y="185" class="text-label">MaxPool 3</text>
+                    <text x="860" y="205" class="component-label">2×2 pool</text>
+                    <text x="860" y="220" class="component-label">stride=2</text>
+                    <text x="860" y="245" class="component-label">Output:</text>
+                    <text x="860" y="260" class="component-label">26×26×128</text>
+                    
+                    <!-- Global Average Pooling -->
+                    <line x1="900" y1="225" x2="930" y2="225" class="arrow"/>
+                    <rect x="940" y="160" width="100" height="130" class="temporal-box"/>
+                    <text x="990" y="185" class="text-label">Global Avg</text>
+                    <text x="990" y="200" class="text-label">Pooling</text>
+                    <text x="990" y="225" class="component-label">26×26→1×1</text>
+                    <text x="990" y="245" class="component-label">Output:</text>
+                    <text x="990" y="260" class="component-label">1×1×128</text>
+                    
+                    <!-- Feature Maps Output -->
+                    <line x1="1040" y1="225" x2="1070" y2="225" class="arrow"/>
+                    <rect x="1080" y="120" width="140" height="210" class="feature-map"/>
+                    <text x="1150" y="145" class="text-label">Feature Maps</text>
+                    <text x="1150" y="165" class="text-label">Output</text>
+                    
+                    <!-- Feature representations -->
+                    <rect x="1100" y="185" width="100" height="25" class="storage-box"/>
+                    <text x="1150" y="200" class="component-label">Facial Features</text>
+                    
+                    <rect x="1100" y="215" width="100" height="25" class="storage-box"/>
+                    <text x="1150" y="230" class="component-label">Eye Gaze Patterns</text>
+                    
+                    <rect x="1100" y="245" width="100" height="25" class="storage-box"/>
+                    <text x="1150" y="260" class="component-label">Body Posture</text>
+                    
+                    <rect x="1100" y="275" width="100" height="25" class="storage-box"/>
+                    <text x="1150" y="290" class="component-label">Hand Movements</text>
+                    
+                    <text x="1150" y="315" class="component-label">128-D Feature Vector</text>
+                    
+                    <!-- Architecture Labels -->
+                    <text x="100" y="100" class="text-label" style="fill: #16a085; font-weight: bold;">INPUT</text>
+                    <text x="235" y="100" class="text-label" style="fill: #6c757d; font-weight: bold;">CONV-1</text>
+                    <text x="360" y="100" class="text-label" style="fill: #3498db; font-weight: bold;">POOL-1</text>
+                    <text x="485" y="100" class="text-label" style="fill: #6c757d; font-weight: bold;">CONV-2</text>
+                    <text x="610" y="100" class="text-label" style="fill: #3498db; font-weight: bold;">POOL-2</text>
+                    <text x="735" y="100" class="text-label" style="fill: #6c757d; font-weight: bold;">CONV-3</text>
+                    <text x="860" y="100" class="text-label" style="fill: #3498db; font-weight: bold;">POOL-3</text>
+                    <text x="990" y="100" class="text-label" style="fill: #ffc107; font-weight: bold;">GAP</text>
+                    <text x="1150" y="100" class="text-label" style="fill: #28a745; font-weight: bold;">FEATURES</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Figure 3: Temporal Modeling -->
+        <div class="diagram-section" id="diagram-2">
+            <div class="diagram-container">
+                <div class="diagram-title">Figure 3: Temporal Modeling for Behavioral Patterns</div>
+                <svg viewBox="0 0 1400 600">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#34495e"/>
+                        </marker>
+                    </defs>
+                    
+                    <!-- CNN Features Input -->
+                    <rect x="50" y="150" width="120" height="200" class="feature-map"/>
+                    <text x="110" y="175" class="text-label">CNN Spatial</text>
+                    <text x="110" y="195" class="text-label">Features</text>
+                    
+                    <rect x="70" y="220" width="80" height="20" class="storage-box"/>
+                    <text x="110" y="233" class="component-label">Frame t-2</text>
+                    
+                    <rect x="70" y="245" width="80" height="20" class="storage-box"/>
+                    <text x="110" y="258" class="component-label">Frame t-1</text>
+                    
+                    <rect x="70" y="270" width="80" height="20" class="storage-box"/>
+                    <text x="110" y="283" class="component-label">Frame t</text>
+                    
+                    <rect x="70" y="295" width="80" height="20" class="storage-box"/>
+                    <text x="110" y="308" class="component-label">Frame t+1</text>
+                    
+                    <text x="110" y="330" class="component-label">128-D vectors</text>
+                    
+                    <!-- Temporal Sequence Formation -->
+                    <line x1="170" y1="250" x2="220" y2="250" class="arrow"/>
+                    <rect x="240" y="180" width="150" height="140" class="temporal-box"/>
+                    <text x="315" y="205" class="text-label">Temporal Sequence</text>
+                    <text x="315" y="225" class="text-label">Formation</text>
+                    <text x="315" y="250" class="component-label">• Window Size: 16 frames</text>
+                    <text x="315" y="265" class="component-label">• Stride: 4 frames</text>
+                    <text x="315" y="280" class="component-label">• Overlap: 75%</text>
+                    <text x="315" y="295" class="component-label">• Sequence Length: T</text>
+                    
+                    <!-- Branch to LSTM and Transformer -->
+                    <line x1="390" y1="250" x2="440" y2="250" class="arrow"/>
+                    
+                    <!-- Decision Point -->
+                    <circle cx="460" cy="250" r="20" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+                    <text x="460" y="255" class="component-label" text-anchor="middle">OR</text>
+                    
+                    <!-- LSTM Path -->
+                    <line x1="460" y1="230" x2="460" y2="180" class="arrow"/>
+                    <line x1="460" y1="180" x2="530" y2="180" class="arrow"/>
+                    
+                    <rect x="550" y="120" width="200" height="120" class="process-box"/>
+                    <text x="650" y="145" class="text-label">LSTM Layers</text>
+                    <text x="650" y="170" class="component-label">• Bidirectional LSTM</text>
+                    <text x="650" y="185" class="component-label">• Hidden Size: 256</text>
+                    <text x="650" y="200" class="component-label">• Num Layers: 2</text>
+                    <text x="650" y="215" class="component-label">• Dropout: 0.3</text>
+                    
+                    <!-- Transformer Path -->
+                    <line x1="460" y1="270" x2="460" y2="320" class="arrow"/>
+                    <line x1="460" y1="320" x2="530" y2="320" class="arrow"/>
+                    
+                    <rect x="550" y="280" width="200" height="140" class="cnn-layer"/>
+                    <text x="650" y="305" class="text-label">Multi-Head</text>
+                    <text x="650" y="325" class="text-label">Self-Attention</text>
+                    <text x="650" y="350" class="component-label">• Attention Heads: 8</text>
+                    <text x="650" y="365" class="component-label">• Model Dim: 512</text>
+                    <text x="650" y="380" class="component-label">• Feed Forward: 2048</text>
+                    <text x="650" y="395" class="component-label">• Positional Encoding</text>
+                    
+                    <!-- Convergence -->
+                    <line x1="750" y1="180" x2="800" y2="180" class="arrow"/>
+                    <line x1="800" y1="180" x2="800" y2="250" class="arrow"/>
+                    <line x1="750" y1="350" x2="800" y2="350" class="arrow"/>
+                    <line x1="800" y1="350" x2="800" y2="250" class="arrow"/>
+                    
+                    <!-- Behavioral Pattern Recognition -->
+                    <line x1="820" y1="250" x2="870" y2="250" class="arrow"/>
+                    <rect x="890" y="180" width="180" height="140" class="classification-box"/>
+                    <text x="980" y="205" class="text-label">Behavioral Pattern</text>
+                    <text x="980" y="225" class="text-label">Recognition</text>
+                    
+                    <text x="980" y="250" class="component-label">Detected Patterns:</text>
+                    <text x="980" y="270" class="component-label">• Repetitive Movements</text>
+                    <text x="980" y="285" class="component-label">• Gaze Aversion</text>
+                    <text x="980" y="300" class="component-label">• Social Interaction</text>
+                    
+                    <!-- Output -->
+                    <line x1="1070" y1="250" x2="1120" y2="250" class="arrow"/>
+                    <rect x="1140" y="200" width="140" height="100" class="feature-map"/>
+                    <text x="1210" y="225" class="text-label">Temporal</text>
+                    <text x="1210" y="245" class="text-label">Features</text>
+                    <text x="1210" y="270" class="component-label">Pattern Vectors</text>
+                    <text x="1210" y="285" class="component-label">Confidence Scores</text>
+                    
+                    <!-- Attention Visualization (for Transformer) -->
+                    <rect x="450" y="450" width="300" height="100" class="temporal-box" opacity="0.7"/>
+                    <text x="600" y="475" class="text-label">Attention Mechanism Visualization</text>
+                    
+                    <!-- Attention Matrix -->
+                    <rect x="470" y="485" width="15" height="15" fill="#e74c3c" opacity="0.8"/>
+                    <rect x="490" y="485" width="15" height="15" fill="#f39c12" opacity="0.6"/>
+                    <rect x="510" y="485" width="15" height="15" fill="#27ae60" opacity="0.4"/>
+                    <rect x="530" y="485" width="15" height="15" fill="#3498db" opacity="0.3"/>
+                    <rect x="550" y="485" width="15" height="15" fill="#9b59b6" opacity="0.5"/>
+                    <rect x="570" y="485" width="15" height="15" fill="#e67e22" opacity="0.7"/>
+                    
+                    <text x="475" y="520" class="component-label" style="font-size: 9px;">t-3</text>
+                    <text x="495" y="520" class="component-label" style="font-size: 9px;">t-2</text>
+                    <text x="515" y="520" class="component-label" style="font-size: 9px;">t-1</text>
+                    <text x="535" y="520" class="component-label" style="font-size: 9px;">t</text>
+                    <text x="555" y="520" class="component-label" style="font-size: 9px;">t+1</text>
+                    <text x="575" y="520" class="component-label" style="font-size: 9px;">t+2</text>
+                    
+                    <text x="650" y="520" class="component-label" style="font-size: 9px;">High Attention</text>
+                    <text x="720" y="520" class="component-label" style="font-size: 9px;">Low Attention</text>
+                    
+                    <!-- Process Flow Indicators -->
+                    <text x="110" y="100" class="text-label" style="fill: #28a745; font-weight: bold;">CNN INPUT</text>
+                    <text x="315" y="150" class="text-label" style="fill: #ffc107; font-weight: bold;">SEQUENCE</text>
+                    <text x="650" y="90" class="text-label" style="fill: #3498db; font-weight: bold;">LSTM</text>
+                    <text x="650" y="250" class="text-label" style="fill: #6c757d; font-weight: bold;">TRANSFORMER</text>
+                    <text x="980" y="150" class="text-label" style="fill: #dc3545; font-weight: bold;">RECOGNITION</text>
+                    <text x="1210" y="170" class="text-label" style="fill: #28a745; font-weight: bold;">OUTPUT</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Figure 4: Classification Output with Temporal Behaviour Mapping -->
+        <div class="diagram-section" id="diagram-3">
+            <div class="diagram-container">
+                <div class="diagram-title">Figure 4: Classification Output with Temporal Behaviour Mapping</div>
+                <svg viewBox="0 0 1400 700">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#34495e"/>
+                        </marker>
+                        <pattern id="timelinePattern" patternUnits="userSpaceOnUse" width="4" height="4">
+                            <rect width="4" height="4" fill="#ecf0f1"/>
+                            <rect width="2" height="2" fill="#bdc3c7"/>
+                        </pattern>
+                    </defs>
+                    
+                    <!-- Temporal Features Input -->
+                    <rect x="50" y="150" width="140" height="120" class="feature-map"/>
+                    <text x="120" y="175" class="text-label">Temporal Features</text>
+                    <text x="120" y="195" class="text-label">from LSTM/</text>
+                    <text x="120" y="215" class="text-label">Transformer</text>
+                    <text x="120" y="240" class="component-label">Pattern Vectors</text>
+                    <text x="120" y="255" class="component-label">Confidence Scores</text>
+                    
+                    <!-- Arrow to AI Classification Engine -->
+                    <line x1="190" y1="210" x2="240" y2="210" class="arrow"/>
+                    
+                    <!-- AI Classification Engine -->
+                    <rect x="260" y="120" width="180" height="150" class="classification-box"/>
+                    <text x="350" y="145" class="text-label">AI Classification</text>
+                    <text x="350" y="165" class="text-label">Engine</text>
+                    
+                    <text x="350" y="190" class="component-label">Multi-Class Classifier:</text>
+                    
+                    <!-- Behavior Classifications -->
+                    <rect x="280" y="200" width="140" height="20" class="storage-box"/>
+                    <text x="350" y="213" class="component-label">Hand Flapping</text>
+                    
+                    <rect x="280" y="225" width="140" height="20" class="storage-box"/>
+                    <text x="350" y="238" class="component-label">Head Banging</text>
+                    
+                    <rect x="280" y="250" width="140" height="20" class="storage-box"/>
+                    <text x="350" y="263" class="component-label">Spinning</text>
+                    
+                    <!-- Arrow to Video Timeline Analysis -->
+                    <line x1="440" y1="210" x2="490" y2="210" class="arrow"/>
+                    
+                    <!-- Video Timeline Analysis -->
+                    <rect x="510" y="80" width="350" height="300" class="temporal-box"/>
+                    <text x="685" y="105" class="text-label">Video Timeline Analysis</text>
+                    <text x="685" y="125" class="component-label">Real-time Behavioral Mapping</text>
+                    
+                    <!-- Timeline Grid -->
+                    <rect x="530" y="140" width="310" height="220" fill="url(#timelinePattern)" stroke="#bdc3c7"/>
+                    
+                    <!-- Time Markers -->
+                    <text x="540" y="135" class="component-label" style="font-size: 10px;">0s</text>
+                    <text x="610" y="135" class="component-label" style="font-size: 10px;">30s</text>
+                    <text x="680" y="135" class="component-label" style="font-size: 10px;">60s</text>
+                    <text x="750" y="135" class="component-label" style="font-size: 10px;">90s</text>
+                    <text x="820" y="135" class="component-label" style="font-size: 10px;">120s</text>
+                    
+                    <!-- Behavior Timeline Bars -->
+                    <!-- Hand Flapping -->
+                    <text x="520" y="175" class="component-label" style="font-size: 10px;">Hand Flapping</text>
+                    <rect x="540" y="165" width="60" height="15" class="behavior-indicator"/>
+                    <rect x="630" y="165" width="40" height="15" class="behavior-indicator"/>
+                    <rect x="720" y="165" width="80" height="15" class="behavior-indicator"/>
+                    
+                    <!-- Head Banging -->
+                    <text x="520" y="205" class="component-label" style="font-size: 10px;">Head Banging</text>
+                    <rect x="570" y="195" width="90" height="15" fill="#f39c12" rx="2"/>
+                    <rect x="690" y="195" width="50" height="15" fill="#f39c12" rx="2"/>
+                    
+                    <!-- Spinning -->
+                    <text x="520" y="235" class="component-label" style="font-size: 10px;">Spinning</text>
+                    <rect x="550" y="225" width="30" height="15" fill="#9b59b6" rx="2"/>
+                    <rect x="610" y="225" width="70" height="15" fill="#9b59b6" rx="2"/>
+                    <rect x="750" y="225" width="40" height="15" fill="#9b59b6" rx="2"/>
+                    
+                    <!-- Intensity Indicators -->
+                    <text x="685" y="285" class="component-label" style="font-size: 10px;">Intensity Level:</text>
+                    <rect x="630" y="295" width="20" height="10" fill="#2ecc71" rx="2"/>
+                    <text x="655" y="303" class="component-label" style="font-size: 9px;">Low</text>
+                    <rect x="670" y="295" width="20" height="10" fill="#f39c12" rx="2"/>
+                    <text x="695" y="303" class="component-label" style="font-size: 9px;">Med</text>
+                    <rect x="710" y="295" width="20" height="10" fill="#e74c3c" rx="2"/>
+                    <text x="735" y="303" class="component-label" style="font-size: 9px;">High</text>
+                    
+                    <!-- Confidence Scores -->
+                    <text x="685" y="325" class="component-label" style="font-size: 10px;">Detection Confidence:</text>
+                    <rect x="650" y="335" width="70" height="15" fill="#ecf0f1" stroke="#bdc3c7" rx="2"/>
+                    <rect x="650" y="335" width="56" height="15" fill="#27ae60" rx="2"/>
+                    <text x="685" y="345" class="component-label" style="font-size: 9px;">80%</text>
+                    
+                    <!-- Arrow to Statistical Analysis -->
+                    <line x1="860" y1="230" x2="910" y2="230" class="arrow"/>
+                    
+                    <!-- Statistical Analysis Output -->
+                    <rect x="930" y="150" width="220" height="300" class="process-box"/>
+                    <text x="1040" y="175" class="text-label">Statistical Analysis</text>
+                    <text x="1040" y="195" class="text-label">& Report Generation</text>
+                    
+                    <!-- Statistics -->
+                    <text x="1040" y="220" class="component-label">Behavior Frequency Analysis:</text>
+                    
+                    <rect x="950" y="230" width="180" height="25" class="storage-box"/>
+                    <text x="1040" y="247" class="component-label">Hand Flapping: 12 episodes (45%)</text>
+                    
+                    <rect x="950" y="260" width="180" height="25" class="storage-box"/>
+                    <text x="1040" y="277" class="component-label">Head Banging: 5 episodes (19%)</text>
+                    
+                    <rect x="950" y="290" width="180" height="25" class="storage-box"/>
+                    <text x="1040" y="307" class="component-label">Spinning: 9 episodes (36%)</text>
+                    
+                    <!-- Duration Analysis -->
+                    <text x="1040" y="340" class="component-label">Average Duration:</text>
+                    <text x="1040" y="355" class="component-label">• Hand Flapping: 4.2s</text>
+                    <text x="1040" y="370" class="component-label">• Head Banging: 3.5s</text>
+                    <text x="1040" y="385" class="component-label">• Spinning: 8.7s</text>
+                    
+                    <!-- Overall Assessment -->
+                    <rect x="950" y="420" width="180" height="25" class="classification-box"/>
+                    <text x="1040" y="437" class="component-label">ASD Risk Assessment: HIGH</text>
+                    
+                    <!-- Arrow to Final Output -->
+                    <line x1="1150" y1="300" x2="1200" y2="300" class="arrow"/>
+                    
+                    <!-- Final Output Report -->
+                    <rect x="1220" y="200" width="150" height="200" class="feature-map"/>
+                    <text x="1295" y="225" class="text-label">Clinical Report</text>
+                    <text x="1295" y="245" class="text-label">Generation</text>
+                    
+                    <text x="1295" y="270" class="component-label">• Video Summary</text>
+                    <text x="1295" y="285" class="component-label">• Behavior Timeline</text>
+                    <text x="1295" y="300" class="component-label">• Statistical Analysis</text>
+                    <text x="1295" y="315" class="component-label">• Risk Assessment</text>
+                    <text x="1295" y="330" class="component-label">• Recommendations</text>
+                    <text x="1295" y="345" class="component-label">• Confidence Metrics</text>
+                    
+                    <text x="1295" y="370" class="component-label">PDF/JSON Export</text>
+                    
+                    <!-- Process Flow Indicators -->
+                    <text x="120" y="100" class="text-label" style="fill: #28a745; font-weight: bold;">FEATURES</text>
+                    <text x="350" y="90" class="text-label" style="fill: #dc3545; font-weight: bold;">CLASSIFICATION</text>
+                    <text x="685" y="50" class="text-label" style="fill: #ffc107; font-weight: bold;">TIMELINE ANALYSIS</text>
+                    <text x="1040" y="120" class="text-label" style="fill: #3498db; font-weight: bold;">STATISTICS</text>
+                    <text x="1295" y="170" class="text-label" style="fill: #28a745; font-weight: bold;">REPORT</text>
+                    
+                    <!-- Real-time Processing Indicator -->
+                    <circle cx="100" cy="500" r="8" fill="#2ecc71">
+                        <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <text x="120" y="505" class="component-label">Real-time Processing</text>
+                    
+                    <!-- Performance Metrics -->
+                    <rect x="50" y="530" width="300" height="120" class="temporal-box" opacity="0.8"/>
+                    <text x="200" y="555" class="text-label">System Performance Metrics</text>
+                    
+                    <text x="70" y="575" class="component-label">Processing Speed: 30 FPS</text>
+                    <text x="70" y="590" class="component-label">Detection Latency: &lt; 50ms</text>
+                    <text x="70" y="605" class="component-label">Overall Accuracy: 92.5%</text>
+                    <text x="70" y="620" class="component-label">False Positive Rate: 3.2%</text>
+                    <text x="70" y="635" class="component-label">Memory Usage: 2.1 GB</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDiagram(index) {
+            // Hide all diagrams
+            const sections = document.querySelectorAll('.diagram-section');
+            const buttons = document.querySelectorAll('.nav-btn');
+            
+            sections.forEach(section => section.classList.remove('active'));
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected diagram
+            document.getElementById(`diagram-${index}`).classList.add('active');
+            buttons[index].classList.add('active');
+        }
+        
+        // Initialize with first diagram
+        document.addEventListener('DOMContentLoaded', function() {
+            showDiagram(0);
+        });
+    </script>
+</body>
+</html>

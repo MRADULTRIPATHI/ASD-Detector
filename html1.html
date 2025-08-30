@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNN Spatial Feature Extraction Architecture</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        .title {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow-x: auto;
+            padding: 20px 0;
+            min-height: 400px;
+        }
+        
+        .layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 15px;
+            min-width: 120px;
+        }
+        
+        .layer-box {
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .layer-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .input-frame {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            width: 100px;
+            height: 100px;
+            border: 3px solid #e74c3c;
+        }
+        
+        .conv-layer {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            width: 90px;
+            height: 90px;
+        }
+        
+        .pooling-layer {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            width: 70px;
+            height: 70px;
+        }
+        
+        .feature-map {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            width: 110px;
+            height: 90px;
+        }
+        
+        .arrow {
+            font-size: 30px;
+            color: #3498db;
+            margin: 0 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.6; transform: scale(1); }
+        }
+        
+        .layer-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 8px;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .layer-details {
+            font-size: 10px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-top: 4px;
+            line-height: 1.2;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            width: 60px;
+            height: 60px;
+            margin: 10px auto;
+        }
+        
+        .feature-cell {
+            background: #ecf0f1;
+            border-radius: 2px;
+            animation: flicker 3s infinite;
+        }
+        
+        .feature-cell:nth-child(odd) {
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { background: #ecf0f1; }
+            50% { background: #3498db; }
+        }
+        
+        .parameters {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .parameters h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .param-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .param-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .param-label {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 12px;
+        }
+        
+        .param-value {
+            color: #7f8c8d;
+            font-size: 11px;
+            margin-top: 2px;
+        }
+        
+        .legend {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .legend h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .legend-text {
+            font-size: 12px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            Figure 2: Convolutional Neural Network Architecture for Spatial Feature Extraction
+        </div>
+        
+        <div class="diagram">
+            <!-- Input Frame -->
+            <div class="layer">
+                <div class="layer-box input-frame">
+                    <div style="font-size: 12px; font-weight: bold; color: #2c3e50;">
+                        Video Frame
+                    </div>
+                </div>
+                <div class="layer-label">Input Layer</div>
+                <div class="layer-details">224×224×3<br>RGB Image</div>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <!-- Conv Layer 1 -->
+            <div class="layer">
+                <div class="layer-box conv-layer">
+                    <div style="font-size: 11px; font-weight: bold;">
+                        Conv2D<br>ReLU
+                    </div>
+                </div>
+                <div class="layer-label">Conv Layer 1</div>
+                <div class="layer-details">32 filters<br>3×3 kernel</div>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <!-- Max Pool 1 -->
+            <div class="layer">
+                <div class="layer-box pooling-layer">
+                    <div style="font-size: 11px; font-weight: bold;">
+                        MaxPool2D
+                    </div>
+                </div>
+                <div class="layer-label">Pooling 1</div>
+                <div class="layer-details">2×2 pool<br>112×112×32</div>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <!-- Conv Layer 2 -->
+            <div class="layer">
+                <div class="layer-box conv-layer">
+                    <div style="font-size: 11px; font-weight: bold;">
+                        Conv2D<br>ReLU
+                    </div>
+                </div>
+                <div class="layer-label">Conv Layer 2</div>
+                <div class="layer-details">64 filters<br>3×3 kernel</div>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <!-- Max Pool 2 -->
+            <div class="layer">
+                <div class="layer-box pooling-layer">
+                    <div style="font-size: 11px; font-weight: bold;">
+                        MaxPool2D
+                    </div>
+                </div>
+                <div class="layer-label">Pooling 2</div>
+                <div class="layer-details">2×2 pool<br>56×56×64</div>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <!-- Conv Layer 3 -->
+            <div class="layer">
+                <div class="layer-box conv-layer">
+                    <div style="font-size: 11px; font-weight: bold;">
+                        Conv2D<br>ReLU
+                    </div>
+                </div>
+                <div class="layer-label">Conv Layer 3</div>
+                <div class="layer-details">128 filters<br>3×3 kernel</div>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <!-- Feature Maps -->
+            <div class="layer">
+                <div class="layer-box feature-map">
+                    <div>
+                        <div style="font-size: 11px; font-weight: bold; margin-bottom: 5px;">
+                            Spatial Features
+                        </div>
+                        <div class="feature-grid">
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                            <div class="feature-cell"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layer-label">Feature Maps</div>
+                <div class="layer-details">128 channels<br>Extracted Features</div>
+            </div>
+        </div>
+        
+        <div class="parameters">
+            <h3>Network Architecture Parameters</h3>
+            <div class="param-grid">
+                <div class="param-item">
+                    <div class="param-label">Input Dimensions</div>
+                    <div class="param-value">224 × 224 × 3 (Height × Width × Channels)</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">Convolution Kernels</div>
+                    <div class="param-value">3×3 filters with stride=1, padding=same</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">Activation Function</div>
+                    <div class="param-value">ReLU (Rectified Linear Unit)</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">Pooling Strategy</div>
+                    <div class="param-value">Max Pooling 2×2 with stride=2</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">Feature Channels</div>
+                    <div class="param-value">32 → 64 → 128 (Progressive increase)</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">Extracted Features</div>
+                    <div class="param-value">Facial expressions, eye gaze, body posture</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="legend">
+            <h4>Legend</h4>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(45deg, #ff9a9e, #fecfef);"></div>
+                    <div class="legend-text">Input Video Frame</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(45deg, #667eea, #764ba2);"></div>
+                    <div class="legend-text">Convolutional Layers</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(45deg, #f093fb, #f5576c);"></div>
+                    <div class="legend-text">Pooling Layers</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(45deg, #4facfe, #00f2fe);"></div>
+                    <div class="legend-text">Feature Maps Output</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
